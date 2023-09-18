@@ -20,8 +20,8 @@ export class CoursesComponent implements OnInit{
 
   constructor(private coursesService: CoursesService, 
     public dialog: MatDialog,
-    private router: Router,
-    private route: ActivatedRoute
+    public router: Router,
+    public route: ActivatedRoute
     ) {
     //this.courses = [];
     this.courses$ = this.coursesService.list().pipe(
@@ -39,10 +39,17 @@ export class CoursesComponent implements OnInit{
       });
     }
   ngOnInit(): void {}
+  
 
   onAdd(){
-    this.router.navigate(['/new'], {relativeTo: this.route});
+  if(this.router){
+    this.router.navigate(['new'], {relativeTo: this.route});
+    console.log('onAdd');
+  }else{
+    this.onError;
+    console.log('onError');
   }
+}
 }
 
 
