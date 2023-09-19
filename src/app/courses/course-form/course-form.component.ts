@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Course } from '../model/course';
 import { CoursesService } from '../services/courses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Action } from 'rxjs/internal/scheduler/Action';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-course-form',
@@ -12,26 +12,36 @@ import { Action } from 'rxjs/internal/scheduler/Action';
 })
 export class CourseFormComponent implements OnInit{
 
-  form: FormGroup;
+  form = this.formBuilder.group({ 
+    name:  [''],
+    category: ['']
+  });
 
   constructor(private formBuilder: FormBuilder,
     private service: CoursesService,
-    private snackBar: MatSnackBar){
-    this.form = this.formBuilder.group({ 
-       name: [null],
-       category: [null]});
+    private snackBar: MatSnackBar,
+    private location: Location){
+    
   }
 
   ngOnInit(): void {}
 
   onSubmit(){
     this.service.save(this.form.value)
-    .subscribe(result => console.log(result), error => this.onError());
+    .subscribe(result => this.onSuccess(), error => this.onError());
   }
 
-  onCancel(): void{}
+  onCancel(): void{
+    this.location.back();
+  }
+
+  private onSuccess(){
+    this.snackBar.open('Curso salvo com sucesso', '', { duration: 5000 });
+    console.log('sucesso');
+    this.onCancel();
+  }
 
   private onError(){
-    this.snackBar.open('Erro salvar o curso', '', {duration: 5000});
+    this.snackBar.open('Erro salvar o curso', '', { duration: 5000 });
   }
 }
