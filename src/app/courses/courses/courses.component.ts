@@ -19,9 +19,9 @@ export class CoursesComponent implements OnInit{
 
 
   constructor(private coursesService: CoursesService, 
-    public dialog: MatDialog,
-    public router: Router,
-    public route: ActivatedRoute
+    private dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute
     ) {
     //this.courses = [];
     this.courses$ = this.coursesService.list().pipe(

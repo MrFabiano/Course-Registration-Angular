@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Course } from '../model/course';
 import { CoursesService } from '../services/courses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
@@ -28,7 +27,7 @@ export class CourseFormComponent implements OnInit{
 
   onSubmit(){
     this.service.save(this.form.value)
-    .subscribe(result => this.onSuccess(), error => this.onError());
+  .subscribe(result => this.onSuccess(), error => this.onError());
   }
 
   onCancel(): void{
