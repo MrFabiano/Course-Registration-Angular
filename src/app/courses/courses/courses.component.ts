@@ -39,7 +39,6 @@ export class CoursesComponent implements OnInit{
       });
     }
   ngOnInit(): void {}
-  
 
   onAdd(){
   if(this.router){
@@ -49,7 +48,7 @@ export class CoursesComponent implements OnInit{
     this.onError;
     console.log('onError');
   }
-}
+ }
 }
 
 
