@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Course } from '../model/course';
-import { CoursesService } from '../services/courses.service';
+import { Course } from '../../model/course';
+import { CoursesService } from '../../services/courses.service';
 import { Observable, catchError, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
@@ -14,12 +14,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CoursesComponent implements OnInit{
 
   courses$: Observable<Course[]>;
-  displayedColumns = ['name', 'category', 'actions'];
-
-
 
   constructor(private coursesService: CoursesService, 
-    private dialog: MatDialog,
+    public dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute
     ) {
@@ -41,14 +38,12 @@ export class CoursesComponent implements OnInit{
   ngOnInit(): void {}
 
   onAdd(){
-  if(this.router){
     this.router.navigate(['new'], {relativeTo: this.route});
-    console.log('onAdd');
-  }else{
-    this.onError;
-    console.log('onError');
-  }
- }
+   }
+
+   onEdit(course: Course){
+    this.router.navigate(['edit', course._id], {relativeTo: this.route});
+   }
 }
 
 
