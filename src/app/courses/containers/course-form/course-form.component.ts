@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormArray, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { CoursesService } from '../../services/courses.service';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../model/course';
+import { Lesson } from '../../model/lesson';
 
 @Component({
   selector: 'app-course-form',
@@ -13,12 +14,7 @@ import { Course } from '../../model/course';
 })
 export class CourseFormComponent implements OnInit{
 
-  form = this.formBuilder.group({ 
-    name:['',[Validators.required,
-      Validators.minLength(5), 
-      Validators.maxLength(100)]],
-    category: ['',[Validators.required]]
-  });
+   form!: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
     private service: CoursesService,
@@ -30,10 +26,48 @@ export class CourseFormComponent implements OnInit{
 
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course'];
-    this.form.setValue({
-      name: course.name,
-      category: course.category
+    this.form = this.formBuilder.group({ 
+    name:[course.name,[Validators.required,
+      Validators.minLength(5), 
+      Validators.maxLength(100)]],
+    category: [course.category,[Validators.required]],
+    lessons: this.formBuilder.array(this.retrieveLessons(course))
+  });
+  console.log(this.form);
+  console.log(this.form.value);
+  }
+
+  private retrieveLessons(course: Course){
+    const lessons = [];
+     if(course?.lessons){
+        course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)))
+     }else{
+        lessons.push(this.createLesson());
+     }
+
+     return lessons;
+  }
+
+  private createLesson(lesson: Lesson = {id: '', name: '', youTubeUrl: ''}){
+    return this.formBuilder.group({
+      id: [lesson.id],
+      name: [lesson.name],
+      youTubeUrl: [lesson.youTubeUrl]
     });
+  }
+
+  addNewLesson(){
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    lessons.push(this.createLesson());
+  }
+
+  removeLesson(index: number){
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    lessons.removeAt(index);
+  }
+
+  getLessonsFormArray(){
+    return (<UntypedFormArray>this.form.get('lessons')).controls;
   }
 
   onSubmit(){
