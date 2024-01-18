@@ -30,19 +30,19 @@ export class FormUtilsService {
 
   getErrorMessageFromField(field: UntypedFormControl){
     if(field?.hasError('required')){
-      return 'campo abrigatorio';
+      return 'Required field';
     }
     if(field?.hasError('minlength')){
       const requiredLength: number = field.errors ? field.errors['minlength']['requiredLength'] : 5;
-      return `Tamanho minino precisa ser de ${requiredLength} caracteres.`;
+      return `Mini size needs to be ${requiredLength} caracteres.`;
     }
 
     if(field?.hasError('maxLength')){
       const requiredLength: number  = field.errors ? field.errors['maxlength']['requiredLength'] : 200;
-      return `Tamanho maximo execidido ${requiredLength} caracteres.`;
+      return `Maximum size exceeded ${requiredLength} caracteres.`;
     }
 
-    return 'Campo invalido';
+    return 'Invalid field';
   }
 
   getFormArrayFieldErrorMessage(formGroup: UntypedFormGroup, 
